@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmploymentSystem.WebApi", "EmploymentSystem.WebApi\EmploymentSystem.WebApi.csproj", "{52B7B311-34B1-4F47-9E29-B7991645A70C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmploymentSystem.WebApi", "EmploymentSystem.WebApi\EmploymentSystem.WebApi.csproj", "{52B7B311-34B1-4F47-9E29-B7991645A70C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmploymentSystem.Application", "EmploymentSystem.Application\EmploymentSystem.Application.csproj", "{1B61E75F-A1AE-49CF-AB3E-F4E54A032F78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmploymentSystem.Application", "EmploymentSystem.Application\EmploymentSystem.Application.csproj", "{1B61E75F-A1AE-49CF-AB3E-F4E54A032F78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmploymentSystem.Domain", "EmploymentSystem.Domain\EmploymentSystem.Domain.csproj", "{9A2C111A-2641-4A70-9183-DCDB40E5F995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmploymentSystem.Domain", "EmploymentSystem.Domain\EmploymentSystem.Domain.csproj", "{9A2C111A-2641-4A70-9183-DCDB40E5F995}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmploymentSystem.Persistance", "EmploymentSystem.Infrastructure\EmploymentSystem.Persistance.csproj", "{67DA9735-BD8A-4423-AB94-759F8B90128C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmploymentSystem.Persistance", "EmploymentSystem.Infrastructure\EmploymentSystem.Persistance.csproj", "{67DA9735-BD8A-4423-AB94-759F8B90128C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{F5F67935-A5B6-433C-9778-499F165DF0B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{6A09E5E3-1C34-4050-8840-D67DF02F917D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{44BD33F2-91C5-4849-A34E-FB89A6318194}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmploymentSystem.Services", "EmploymentSystem.Services\EmploymentSystem.Services.csproj", "{37FBFDA7-5BB8-45CA-846F-AAB644FF16EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{67DA9735-BD8A-4423-AB94-759F8B90128C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67DA9735-BD8A-4423-AB94-759F8B90128C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67DA9735-BD8A-4423-AB94-759F8B90128C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37FBFDA7-5BB8-45CA-846F-AAB644FF16EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37FBFDA7-5BB8-45CA-846F-AAB644FF16EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37FBFDA7-5BB8-45CA-846F-AAB644FF16EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37FBFDA7-5BB8-45CA-846F-AAB644FF16EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{1B61E75F-A1AE-49CF-AB3E-F4E54A032F78} = {F5F67935-A5B6-433C-9778-499F165DF0B7}
 		{9A2C111A-2641-4A70-9183-DCDB40E5F995} = {F5F67935-A5B6-433C-9778-499F165DF0B7}
 		{67DA9735-BD8A-4423-AB94-759F8B90128C} = {6A09E5E3-1C34-4050-8840-D67DF02F917D}
+		{37FBFDA7-5BB8-45CA-846F-AAB644FF16EA} = {6A09E5E3-1C34-4050-8840-D67DF02F917D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E077D1A-4789-4BF4-898F-EBF8835845ED}

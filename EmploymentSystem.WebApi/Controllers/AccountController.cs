@@ -1,5 +1,4 @@
-﻿using EmploymentSystem.Application.Absctractions;
-using EmploymentSystem.Domain.Entities;
+﻿using EmploymentSystem.Application.Authentication;
 using EmploymentSystem.WebApi.DTOs;
 using EmploymentSystem.WebApi.Errors;
 using Microsoft.AspNetCore.Identity;

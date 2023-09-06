@@ -1,7 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace EmploymentSystem.Application.Absctractions;
+namespace EmploymentSystem.Application.Authentication;
 
 public interface ITokenService
 {

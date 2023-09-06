@@ -12,4 +12,7 @@ public class AppIdentityDBContext : IdentityDbContext
          
     }
     public DbSet<User> Users { get; set; }
+    public DbSet<Vacancy> Vacancies { get; set; }
+    public DbSet<Domain.Entities.Application> Applications { get; set; }
+
 }

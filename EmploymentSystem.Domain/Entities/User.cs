@@ -1,5 +1,4 @@
 ﻿using EmploymentSystem.Domain.Common;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace EmploymentSystem.Domain.Entities;
 

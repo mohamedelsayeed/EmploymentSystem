@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EmploymentSystem.Domain\EmploymentSystem.Domain.csproj" />
     <ProjectReference Include="..\EmploymentSystem.Infrastructure\EmploymentSystem.Persistance.csproj" />
+    <ProjectReference Include="..\EmploymentSystem.Services\EmploymentSystem.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

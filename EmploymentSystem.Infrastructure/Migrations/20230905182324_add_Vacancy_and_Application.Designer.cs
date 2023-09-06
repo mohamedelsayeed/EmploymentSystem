@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmploymentSystem.Persistance.Migrations;
 
 [DbContext(typeof(AppIdentityDBContext))]
-[Migration("20230905170011_initialMigration")]
-partial class initialMigration
+[Migration("20230905182324_add_Vacancy_and_Application")]
+partial class add_Vacancy_and_Application
 {
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
@@ -23,6 +23,28 @@ partial class initialMigration
             .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
         SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+        modelBuilder.Entity("EmploymentSystem.Domain.Entities.Application", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                b.Property<Guid>("ApplicantId")
+                    .HasColumnType("uniqueidentifier");
+
+                b.Property<DateTime>("ApplicationDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("VacancyId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.ToTable("Applications");
+            });
 
         modelBuilder.Entity("EmploymentSystem.Domain.Entities.User", b =>
             {
@@ -54,6 +76,45 @@ partial class initialMigration
                 b.HasKey("Id");
 
                 b.ToTable("Users");
+            });
+
+        modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                b.Property<int>("CurrentApplications")
+                    .HasColumnType("int");
+
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<Guid>("EmployerId")
+                    .HasColumnType("uniqueidentifier");
+
+                b.Property<DateTime>("ExpiryDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<bool>("IsClosed")
+                    .HasColumnType("bit");
+
+                b.Property<bool>("IsDeleted")
+                    .HasColumnType("bit");
+
+                b.Property<int>("MaxApplications")
+                    .HasColumnType("int");
+
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("Id");
+
+                b.ToTable("Vacancies");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
