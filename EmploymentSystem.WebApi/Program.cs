@@ -2,6 +2,10 @@ using EmploymentSystem.Services;
 using EmploymentSystem.WebApi.Extentions;
 using Quartz.Impl;
 using Quartz;
+using EmploymentSystem.Application.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Serilog;
+using EmploymentSystem.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +15,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddIdentityServices(builder.Configuration);
+var jwtSetting = new JwtSettings();
+builder.Configuration.GetSection("JwtSettings").Bind(jwtSetting);
+builder.Services.AddIdentityServices(builder.Configuration, jwtSetting);
 
 builder.Services.AddApplictaionServices(builder.Configuration);
 
@@ -25,13 +30,10 @@ try
 {
     ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
 
-    // Get a scheduler
     IScheduler scheduler = await schedulerFactory.GetScheduler();
 
-    // Start the scheduler
     await scheduler.Start();
 
-    // Define a job and trigger
     IJobDetail job = JobBuilder.Create<VacanciesArchievingJobService>()
         .WithIdentity("myJob", "myGroup")
         .Build();
@@ -44,7 +46,6 @@ try
             .RepeatForever())
         .Build();
 
-    // Schedule the job
     await scheduler.ScheduleJob(job, trigger);
 }
 catch (Exception)
@@ -53,7 +54,21 @@ catch (Exception)
     throw;
 }
 
-// Configure the HTTP request pipeline.
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+await roleManager.CreateAsync(new IdentityRole<int>("Employer"));
+await roleManager.CreateAsync(new IdentityRole<int>("Applicant"));
+
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -61,6 +76,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

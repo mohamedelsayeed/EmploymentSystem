@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmploymentSystem.Persistance.Migrations;
 
 [DbContext(typeof(AppIdentityDBContext))]
-[Migration("20230905182324_add_Vacancy_and_Application")]
-partial class add_Vacancy_and_Application
+[Migration("20230906181818_createdb")]
+partial class createdb
 {
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
@@ -32,8 +32,8 @@ partial class add_Vacancy_and_Application
 
                 SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                b.Property<Guid>("ApplicantId")
-                    .HasColumnType("uniqueidentifier");
+                b.Property<int>("ApplicantId")
+                    .HasColumnType("int");
 
                 b.Property<DateTime>("ApplicationDate")
                     .HasColumnType("datetime2");
@@ -41,7 +41,14 @@ partial class add_Vacancy_and_Application
                 b.Property<int>("VacancyId")
                     .HasColumnType("int");
 
+                b.Property<int?>("VacancyId1")
+                    .HasColumnType("int");
+
                 b.HasKey("Id");
+
+                b.HasIndex("VacancyId");
+
+                b.HasIndex("VacancyId1");
 
                 b.ToTable("Applications");
             });
@@ -54,13 +61,23 @@ partial class add_Vacancy_and_Application
 
                 SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("int");
+
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
+
                 b.Property<string>("DisplayName")
                     .IsRequired()
                     .HasColumnType("nvarchar(max)");
 
                 b.Property<string>("Email")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
+
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("bit");
 
                 b.Property<string>("FirstName")
                     .IsRequired()
@@ -72,121 +89,6 @@ partial class add_Vacancy_and_Application
                 b.Property<string>("LastName")
                     .IsRequired()
                     .HasColumnType("nvarchar(max)");
-
-                b.HasKey("Id");
-
-                b.ToTable("Users");
-            });
-
-        modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
-
-                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                b.Property<int>("CurrentApplications")
-                    .HasColumnType("int");
-
-                b.Property<string>("Description")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<Guid>("EmployerId")
-                    .HasColumnType("uniqueidentifier");
-
-                b.Property<DateTime>("ExpiryDate")
-                    .HasColumnType("datetime2");
-
-                b.Property<bool>("IsClosed")
-                    .HasColumnType("bit");
-
-                b.Property<bool>("IsDeleted")
-                    .HasColumnType("bit");
-
-                b.Property<int>("MaxApplications")
-                    .HasColumnType("int");
-
-                b.Property<string>("Title")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.HasKey("Id");
-
-                b.ToTable("Vacancies");
-            });
-
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-            {
-                b.Property<string>("Id")
-                    .HasColumnType("nvarchar(450)");
-
-                b.Property<string>("ConcurrencyStamp")
-                    .IsConcurrencyToken()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("Name")
-                    .HasMaxLength(256)
-                    .HasColumnType("nvarchar(256)");
-
-                b.Property<string>("NormalizedName")
-                    .HasMaxLength(256)
-                    .HasColumnType("nvarchar(256)");
-
-                b.HasKey("Id");
-
-                b.HasIndex("NormalizedName")
-                    .IsUnique()
-                    .HasDatabaseName("RoleNameIndex")
-                    .HasFilter("[NormalizedName] IS NOT NULL");
-
-                b.ToTable("AspNetRoles", (string)null);
-            });
-
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
-
-                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                b.Property<string>("ClaimType")
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("ClaimValue")
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("RoleId")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(450)");
-
-                b.HasKey("Id");
-
-                b.HasIndex("RoleId");
-
-                b.ToTable("AspNetRoleClaims", (string)null);
-            });
-
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-            {
-                b.Property<string>("Id")
-                    .HasColumnType("nvarchar(450)");
-
-                b.Property<int>("AccessFailedCount")
-                    .HasColumnType("int");
-
-                b.Property<string>("ConcurrencyStamp")
-                    .IsConcurrencyToken()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("Email")
-                    .HasMaxLength(256)
-                    .HasColumnType("nvarchar(256)");
-
-                b.Property<bool>("EmailConfirmed")
-                    .HasColumnType("bit");
 
                 b.Property<bool>("LockoutEnabled")
                     .HasColumnType("bit");
@@ -234,7 +136,81 @@ partial class add_Vacancy_and_Application
                 b.ToTable("AspNetUsers", (string)null);
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+        modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                b.Property<int>("CurrentApplications")
+                    .HasColumnType("int");
+
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("EmployerId")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("ExpiryDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<bool>("IsArchived")
+                    .HasColumnType("bit");
+
+                b.Property<bool>("IsClosed")
+                    .HasColumnType("bit");
+
+                b.Property<bool>("IsDeleted")
+                    .HasColumnType("bit");
+
+                b.Property<int>("MaxApplications")
+                    .HasColumnType("int");
+
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("EmployerId");
+
+                b.ToTable("Vacancies");
+            });
+
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
+
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex")
+                    .HasFilter("[NormalizedName] IS NOT NULL");
+
+                b.ToTable("AspNetRoles", (string)null);
+            });
+
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
             {
                 b.Property<int>("Id")
                     .ValueGeneratedOnAdd()
@@ -248,9 +224,32 @@ partial class add_Vacancy_and_Application
                 b.Property<string>("ClaimValue")
                     .HasColumnType("nvarchar(max)");
 
-                b.Property<string>("UserId")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(450)");
+                b.Property<int>("RoleId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("RoleId");
+
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
+
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
                 b.HasKey("Id");
 
@@ -259,7 +258,7 @@ partial class add_Vacancy_and_Application
                 b.ToTable("AspNetUserClaims", (string)null);
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
             {
                 b.Property<string>("LoginProvider")
                     .HasColumnType("nvarchar(450)");
@@ -270,9 +269,8 @@ partial class add_Vacancy_and_Application
                 b.Property<string>("ProviderDisplayName")
                     .HasColumnType("nvarchar(max)");
 
-                b.Property<string>("UserId")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(450)");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
                 b.HasKey("LoginProvider", "ProviderKey");
 
@@ -281,13 +279,13 @@ partial class add_Vacancy_and_Application
                 b.ToTable("AspNetUserLogins", (string)null);
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
             {
-                b.Property<string>("UserId")
-                    .HasColumnType("nvarchar(450)");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
-                b.Property<string>("RoleId")
-                    .HasColumnType("nvarchar(450)");
+                b.Property<int>("RoleId")
+                    .HasColumnType("int");
 
                 b.HasKey("UserId", "RoleId");
 
@@ -296,10 +294,10 @@ partial class add_Vacancy_and_Application
                 b.ToTable("AspNetUserRoles", (string)null);
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
             {
-                b.Property<string>("UserId")
-                    .HasColumnType("nvarchar(450)");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
                 b.Property<string>("LoginProvider")
                     .HasColumnType("nvarchar(450)");
@@ -315,55 +313,86 @@ partial class add_Vacancy_and_Application
                 b.ToTable("AspNetUserTokens", (string)null);
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+        modelBuilder.Entity("EmploymentSystem.Domain.Entities.Application", b =>
             {
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                b.HasOne("EmploymentSystem.Domain.Entities.Vacancy", "Vacancy")
+                    .WithMany()
+                    .HasForeignKey("VacancyId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("EmploymentSystem.Domain.Entities.Vacancy", null)
+                    .WithMany("Applications")
+                    .HasForeignKey("VacancyId1");
+
+                b.Navigation("Vacancy");
+            });
+
+        modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
+            {
+                b.HasOne("EmploymentSystem.Domain.Entities.User", "Employer")
+                    .WithMany()
+                    .HasForeignKey("EmployerId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Employer");
+            });
+
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
                     .WithMany()
                     .HasForeignKey("RoleId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
             {
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                b.HasOne("EmploymentSystem.Domain.Entities.User", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
             {
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                b.HasOne("EmploymentSystem.Domain.Entities.User", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
             {
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
                     .WithMany()
                     .HasForeignKey("RoleId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                b.HasOne("EmploymentSystem.Domain.Entities.User", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
             {
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                b.HasOne("EmploymentSystem.Domain.Entities.User", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
+            });
+
+        modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
+            {
+                b.Navigation("Applications");
             });
 #pragma warning restore 612, 618
     }

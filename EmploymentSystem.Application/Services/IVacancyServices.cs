@@ -10,8 +10,9 @@ public interface IVacancyServices
     Task<Vacancy> CreateVacancy(VacancyDto vacancy);
 
     //update
-    Task<Vacancy> UpdateVacancy(Vacancy vacancy);
-
+    Task<Vacancy> UpdateVacancy(VacancyDto vacancy);
+    Task<bool> DeactivateVacancy(int id);
+    Task<bool> ActivateVacancy(int id);
     //delete
     Task<bool> DeleteVacancy(int id);
 
