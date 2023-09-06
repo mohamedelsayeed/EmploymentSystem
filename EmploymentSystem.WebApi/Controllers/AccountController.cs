@@ -1,4 +1,5 @@
 ﻿using EmploymentSystem.Application.Authentication;
+using EmploymentSystem.Domain.Entities;
 using EmploymentSystem.WebApi.DTOs;
 using EmploymentSystem.WebApi.Errors;
 using Microsoft.AspNetCore.Identity;
@@ -8,9 +9,9 @@ namespace EmploymentSystem.WebApi.Controllers;
 
 public class AccountController : BaseApiController
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly ITokenService _tokenService;
-    public AccountController(UserManager<IdentityUser> userManager, ITokenService tokenService)
+    public AccountController(UserManager<User> userManager, ITokenService tokenService)
     {
         _userManager = userManager;
         _tokenService = tokenService;
@@ -23,9 +24,11 @@ public class AccountController : BaseApiController
         var checkEmail = await _userManager.FindByEmailAsync(registerDto.Email);
         if (checkEmail is not null)
             return BadRequest(new ApiValidationErrorResponse() { Errors = new string[] { "this email is already used" } });
-        var user = new IdentityUser()
+        var user = new User()
         {
-
+            FirstName = registerDto.FirstName,
+            LastName = registerDto.LastName,
+            DisplayName = registerDto.DisplayName,
             Email = registerDto.Email,
             PhoneNumber = registerDto.PhoneNumber,
             UserName = registerDto.Email.Split("@")[0],
@@ -55,11 +58,11 @@ public class AccountController : BaseApiController
         if (!checkpassword)
             return Unauthorized(new ApiResponse(401));
         var token = _tokenService.CreateToken(user);
-        
+
         return Ok(new UserDto()
         {
             Token = token,
             Email = user.Email,
-        });;
+        }); ;
     }
 }

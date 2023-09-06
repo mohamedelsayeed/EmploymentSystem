@@ -1,4 +1,5 @@
 ﻿using EmploymentSystem.Application.Authentication;
+using EmploymentSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +18,7 @@ public class TokenService : ITokenService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string CreateToken(IdentityUser user)
+    public string CreateToken(User user)
     {
         var signingCredintials = new SigningCredentials(
                           new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),

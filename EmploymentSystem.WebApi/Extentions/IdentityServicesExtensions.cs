@@ -1,4 +1,5 @@
-﻿using EmploymentSystem.Persistance.Context;
+﻿using EmploymentSystem.Domain.Entities;
+using EmploymentSystem.Persistance.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ public static class IdentityServicesExtensions
             {
                 options.UseSqlServer("Data Source=.;Initial Catalog=EmploymentSystemDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;");
             });
-        services.AddIdentity<IdentityUser, IdentityRole>()
+        services.AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<AppIdentityDBContext>()
             .AddDefaultTokenProviders();
 
