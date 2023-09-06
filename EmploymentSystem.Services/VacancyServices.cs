@@ -2,6 +2,7 @@
 using EmploymentSystem.Application.Services;
 using EmploymentSystem.Domain.DTOs;
 using EmploymentSystem.Domain.Entities;
+using System.Data;
 using System.Linq.Expressions;
 
 namespace EmploymentSystem.Services;
@@ -15,7 +16,6 @@ public class VacancyServices : IVacancyServices
         _unitOfWork = unitOfWork;
         _vacancyRepository = vacancyRepository;
     }
-
     public async Task<Vacancy> CreateVacancy(VacancyDto vacancyDto)
     {
         var vacancey = new Vacancy
@@ -52,7 +52,7 @@ public class VacancyServices : IVacancyServices
         vacancy.IsClosed = true;
         var result = await _unitOfWork.SaveAsync();
         return result > 0;
-    }  
+    }
     public async Task<bool> ActivateVacancy(int id)
     {
         var vacancy = await _vacancyRepository.Get(id);
@@ -88,13 +88,22 @@ public class VacancyServices : IVacancyServices
             EmployerId = vacancy.EmployerId,
             IsClosed = vacancy.IsClosed,
             MaxApplications = vacancy.MaxApplications,
-            Title = vacancy.Title
+            Title = vacancy.Title,
+            Id = vacancy.Id
         };
     }
 
-    public async Task<Vacancy> UpdateVacancy(Vacancy vacancy)
+    public async Task<Vacancy> UpdateVacancy(VacancyDto vacancy)
     {
-        var vacancyResult = await _vacancyRepository.Get(vacancy.Id);
+        var vacancyResult = await _vacancyRepository.Get(vacancy.Id.Value);
+
+        vacancyResult.Description = vacancy.Description;
+        vacancyResult.ExpiryDate = vacancy.ExpiryDate;
+        vacancyResult.EmployerId = vacancy.EmployerId;
+        vacancyResult.Title = vacancy.Title;
+        vacancyResult.MaxApplications = vacancy.MaxApplications;
+
+
         _vacancyRepository.Update(vacancyResult);
         await _unitOfWork.SaveAsync();
         return vacancyResult;

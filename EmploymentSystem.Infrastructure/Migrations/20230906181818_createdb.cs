@@ -4,7 +4,7 @@
 
 namespace EmploymentSystem.Persistance.Migrations;
 
-public partial class initialMigration : Migration
+public partial class createdb : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
@@ -12,7 +12,8 @@ public partial class initialMigration : Migration
             name: "AspNetRoles",
             columns: table => new
             {
-                Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
                 Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                 NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                 ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -26,7 +27,12 @@ public partial class initialMigration : Migration
             name: "AspNetUsers",
             columns: table => new
             {
-                Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
+                FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                IsEmployeer = table.Column<bool>(type: "bit", nullable: false),
                 UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                 NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                 Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -48,29 +54,12 @@ public partial class initialMigration : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "Users",
-            columns: table => new
-            {
-                Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
-                FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                IsEmployeer = table.Column<bool>(type: "bit", nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_Users", x => x.Id);
-            });
-
-        migrationBuilder.CreateTable(
             name: "AspNetRoleClaims",
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
                     .Annotation("SqlServer:Identity", "1, 1"),
-                RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                RoleId = table.Column<int>(type: "int", nullable: false),
                 ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
             },
@@ -91,7 +80,7 @@ public partial class initialMigration : Migration
             {
                 Id = table.Column<int>(type: "int", nullable: false)
                     .Annotation("SqlServer:Identity", "1, 1"),
-                UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                UserId = table.Column<int>(type: "int", nullable: false),
                 ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
             },
@@ -113,7 +102,7 @@ public partial class initialMigration : Migration
                 LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                UserId = table.Column<int>(type: "int", nullable: false)
             },
             constraints: table =>
             {
@@ -130,8 +119,8 @@ public partial class initialMigration : Migration
             name: "AspNetUserRoles",
             columns: table => new
             {
-                UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                UserId = table.Column<int>(type: "int", nullable: false),
+                RoleId = table.Column<int>(type: "int", nullable: false)
             },
             constraints: table =>
             {
@@ -154,7 +143,7 @@ public partial class initialMigration : Migration
             name: "AspNetUserTokens",
             columns: table => new
             {
-                UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                UserId = table.Column<int>(type: "int", nullable: false),
                 LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -169,6 +158,70 @@ public partial class initialMigration : Migration
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
             });
+
+        migrationBuilder.CreateTable(
+            name: "Vacancies",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
+                Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                MaxApplications = table.Column<int>(type: "int", nullable: false),
+                CurrentApplications = table.Column<int>(type: "int", nullable: false),
+                IsClosed = table.Column<bool>(type: "bit", nullable: false),
+                ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                EmployerId = table.Column<int>(type: "int", nullable: false),
+                IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                IsArchived = table.Column<bool>(type: "bit", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Vacancies", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_Vacancies_AspNetUsers_EmployerId",
+                    column: x => x.EmployerId,
+                    principalTable: "AspNetUsers",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "Applications",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
+                ApplicantId = table.Column<int>(type: "int", nullable: false),
+                VacancyId = table.Column<int>(type: "int", nullable: false),
+                ApplicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                VacancyId1 = table.Column<int>(type: "int", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Applications", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_Applications_Vacancies_VacancyId",
+                    column: x => x.VacancyId,
+                    principalTable: "Vacancies",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_Applications_Vacancies_VacancyId1",
+                    column: x => x.VacancyId1,
+                    principalTable: "Vacancies",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Applications_VacancyId",
+            table: "Applications",
+            column: "VacancyId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Applications_VacancyId1",
+            table: "Applications",
+            column: "VacancyId1");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetRoleClaims_RoleId",
@@ -208,10 +261,18 @@ public partial class initialMigration : Migration
             column: "NormalizedUserName",
             unique: true,
             filter: "[NormalizedUserName] IS NOT NULL");
-    }
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Vacancies_EmployerId",
+            table: "Vacancies",
+            column: "EmployerId");
+   }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
+        migrationBuilder.DropTable(
+            name: "Applications");
+
         migrationBuilder.DropTable(
             name: "AspNetRoleClaims");
 
@@ -228,7 +289,7 @@ public partial class initialMigration : Migration
             name: "AspNetUserTokens");
 
         migrationBuilder.DropTable(
-            name: "Users");
+            name: "Vacancies");
 
         migrationBuilder.DropTable(
             name: "AspNetRoles");

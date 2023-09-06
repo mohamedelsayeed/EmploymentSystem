@@ -1,5 +1,5 @@
 ﻿using EmploymentSystem.Application.Authentication;
-using Microsoft.AspNetCore.Identity;
+using EmploymentSystem.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,7 +17,7 @@ public class TokenService : ITokenService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string CreateToken(IdentityUser user)
+    public string CreateToken(User user, string role)
     {
         var signingCredintials = new SigningCredentials(
                           new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
@@ -28,6 +28,7 @@ public class TokenService : ITokenService
             new Claim (JwtRegisteredClaimNames.Email,user.Email.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+            new Claim(ClaimTypes.Role, role)
         };
         var securityToken = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,
