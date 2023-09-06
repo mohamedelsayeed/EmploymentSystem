@@ -1,8 +1,6 @@
 ﻿using EmploymentSystem.Application.Repositories;
 using EmploymentSystem.Application.Services;
 using EmploymentSystem.Domain.DTOs;
-using EmploymentSystem.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace EmploymentSystem.Services;
 

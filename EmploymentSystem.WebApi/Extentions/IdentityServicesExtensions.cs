@@ -1,4 +1,5 @@
-﻿using EmploymentSystem.Domain.Entities;
+﻿using EmploymentSystem.Application.Authentication;
+using EmploymentSystem.Domain.Entities;
 using EmploymentSystem.Persistance.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -10,16 +11,19 @@ namespace EmploymentSystem.WebApi.Extentions;
 
 public static class IdentityServicesExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
-    {
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration, JwtSettings jwtSettings)
+    {   
 
-        services.AddDbContext<AppIdentityDBContext>(options =>
+
+    services.AddDbContext<AppIdentityDBContext>(options =>
             {
                 options.UseSqlServer("Data Source=.;Initial Catalog=EmploymentSystemDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;");
             });
-        services.AddIdentity<User, IdentityRole>()
-            .AddEntityFrameworkStores<AppIdentityDBContext>()
-            .AddDefaultTokenProviders();
+        services.AddIdentity<User, IdentityRole<int>>()
+            .AddEntityFrameworkStores<AppIdentityDBContext>();
+            //.AddDefaultTokenProviders();
+        
+
 
         services.AddAuthentication(options =>
         {
@@ -31,15 +35,15 @@ public static class IdentityServicesExtensions
                options.TokenValidationParameters = new TokenValidationParameters()
                {
                    ValidateIssuer = true,
-                   ValidIssuer = configuration["JWT:ValidIssuer"],
+                   ValidIssuer = jwtSettings.Issuer,
                    ValidateAudience = true,
-                   ValidAudience = configuration["JWT:ValidAudience"],
+                   ValidAudience = jwtSettings.Audiance,
                    ValidateLifetime = true,
                    ValidateIssuerSigningKey = true,
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))
                };
            });
-
+      
         return services;
     }
 }

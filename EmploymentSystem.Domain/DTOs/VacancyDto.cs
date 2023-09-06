@@ -9,5 +9,5 @@ public class VacancyDto
     public int CurrentApplications { get; set; }
     public bool IsClosed { get; set; }
     public DateTime ExpiryDate { get; set; }
-    public Guid EmployerId { get; set; }
+    public int EmployerId { get; set; }
 }

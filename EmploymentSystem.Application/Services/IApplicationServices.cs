@@ -1,5 +1,4 @@
 ﻿using EmploymentSystem.Domain.DTOs;
-using EmploymentSystem.Domain.Entities;
 
 namespace EmploymentSystem.Application.Services;
 
